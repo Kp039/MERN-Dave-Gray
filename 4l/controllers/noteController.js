@@ -18,7 +18,7 @@ const gettAllNotes = expressAsyncHandler(async (req, res) => {
 });
 
 const createNewNote = expressAsyncHandler(async (req, res) => {
-  const { user, title, text } = req.body;
+  const { user, title, text, completed } = req.body;
 
   if (!user || !title || !text) {
     return res.status(400).json({ message: "All fields are required" });
@@ -30,7 +30,7 @@ const createNewNote = expressAsyncHandler(async (req, res) => {
     return res.status(409).json({ message: "Duplicate not title" });
   }
 
-  const note = await Note.create({ user, title, text });
+  const note = await Note.create({ user, title, text, completed });
 
   if (note) {
     return res.status(201).json({ message: "New note created" });
@@ -40,9 +40,9 @@ const createNewNote = expressAsyncHandler(async (req, res) => {
 });
 
 const updateNote = expressAsyncHandler(async (req, res) => {
-  const { id, user, title, test, completed } = req.body;
+  const { id, user, title, text, completed } = req.body;
 
-  if (!id || !user || !title || !test || typeof completed !== "boolean") {
+  if (!id || !user || !title || !text || typeof completed !== "boolean") {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -65,7 +65,7 @@ const updateNote = expressAsyncHandler(async (req, res) => {
 
   const updatedNote = await note.save();
 
-  res.json(`${updateNote.title}' updated`);
+  res.json(`${updatedNote.title}' updated`);
 });
 
 const deleteNote = expressAsyncHandler(async (req, res) => {
